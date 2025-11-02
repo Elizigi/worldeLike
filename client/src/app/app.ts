@@ -90,7 +90,10 @@ export class App implements OnInit {
         }, resultsArray.length * 200 + 600);
       },
       error: (err) => {
-        if (err.message) return this.wordNotIn();
+        if (err.message) {
+          this.wordNotIn();
+          return;
+        }
         console.error('Request failed', err);
       },
     });
