@@ -1,0 +1,11 @@
+.system-message {
+  position: fixed;
+  top: 20%;
+  background-color: rgba(38, 38, 38, 0.665);
+  color: white;
+  font-size: 2rem;
+  left: 50%;
+  transform: translate(-50%);
+  transition: all 0.3s;
+  border-radius: 6px;
+}

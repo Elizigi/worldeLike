@@ -4,19 +4,24 @@ import { WordGridComponent } from './word-grid/word-grid.component';
 import { KeyBoardComponent } from './keyboard/keyboard.component';
 import { HttpClient } from '@angular/common/http';
 import { LetterCell } from './model/letterInterfaceModel';
+import { SystemMessageComponent } from './system-message/system-message.component';
+import { ServerResponse } from './model/serverResponseModel';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, WordGridComponent, KeyBoardComponent],
+  imports: [RouterOutlet, WordGridComponent, KeyBoardComponent, SystemMessageComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
   protected readonly title = signal('client');
   protected readonly userWord = signal('');
+  protected readonly message = signal('');
+
   guesses = signal<LetterCell[][]>(
     Array.from({ length: 5 }, () => Array.from({ length: 6 }, () => ({ letter: '', status: '' })))
   );
+
   row: number = 0;
   controlLocked = false;
 
@@ -55,7 +60,7 @@ export class App {
     console.log('sending');
 
     this.http.post<ServerResponse>('http://localhost:5000/validate', { word }).subscribe({
-      next: (response: ServerResponse) => {
+      next: (response) => {
         const resultsArray = response.result;
         console.log('received');
         console.log('checking for row', this.row);
@@ -93,20 +98,23 @@ export class App {
   wordNotIn() {
     this.controlLocked = false;
     console.log('smh!');
+    this.showSystemMessage('word not in collection');
   }
   gameWin() {
-    console.log('WON!');
+    this.showSystemMessage(' EZ PEASY ');
+    this.showSystemMessage(' Done with ease ');
+    this.showSystemMessage(' Phew ');
   }
   gameOver() {
-    console.log('LOST!');
+    this.showSystemMessage(' GAME OVER ');
   }
   nextRound() {
     this.controlLocked = false;
     this.row++;
     this.userWord.set('');
   }
-}
-
-interface ServerResponse {
-  result: { letter: string; status: 'correct' | 'present' | 'absent' }[];
+  showSystemMessage(message: string) {
+    this.message.set(message);
+    setTimeout(() => this.message.set(''), 2500);
+  }
 }

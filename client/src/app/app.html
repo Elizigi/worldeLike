@@ -3,6 +3,7 @@
     <h1>{{ title() }}</h1>
     <app-word-grid [guesses]="guesses()"></app-word-grid>
     <app-keyboard   (pressed)="addLetter($event)"></app-keyboard>
+    <app-system-message [message]="message()"></app-system-message>
   </div>
 </main>
 
