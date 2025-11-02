@@ -1,3 +1,6 @@
 {
-  "outputDirectory": "dist/client/browser"
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/:match*", "destination": "/index.html" }
+  ]
 }
