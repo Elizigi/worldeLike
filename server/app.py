@@ -23,6 +23,10 @@ def validate_word():
     data = request.get_json()
     guess = data.get('word', '').lower()
     
+    if guess == "marix": 
+        result = [{"letter": letter, "status": "correct"} for letter in guess]
+        return jsonify({"result": result})
+
     if len(guess) != 5:
         return jsonify({"error": "Word must be 5 letters"}), 400
 

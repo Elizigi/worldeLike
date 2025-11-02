@@ -4,3 +4,11 @@ h1 {
   text-shadow: 2px 2px 4px rgb(74, 3, 254);
   user-select: none;
 }
+
+@media screen and (max-width: 768px) {
+*{transform: scale(.8);}
+}
+
+@media screen and (max-width: 480px) {
+ *{transform: scale(.7);}
+}
