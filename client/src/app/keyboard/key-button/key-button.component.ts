@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-key-button',
@@ -10,4 +10,9 @@ import { Component, Input } from '@angular/core';
 export class KeyButtonComponent {
   @Input() key: string = '';
   @Input() status: 'correct' | 'absent' | '' = '';
+  @Output() pressed = new EventEmitter<string>();
+
+  handleClick() {
+    this.pressed.emit(this.key);
+  }
 }

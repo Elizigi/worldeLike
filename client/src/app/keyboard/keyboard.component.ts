@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { KeyButtonComponent } from './key-button/key-button.component';
+import { letterInputModel } from '../model/letterInputModel';
 
 @Component({
   selector: 'app-keyboard',
@@ -9,5 +10,10 @@ import { KeyButtonComponent } from './key-button/key-button.component';
   styleUrls: ['./keyboard.component.scss'],
 })
 export class KeyBoardComponent {
-  keys: string[][] = Array.from({ length: 3 }, () => new Array(6).fill('a'));
+  keys: string[][] = letterInputModel;
+  @Output() pressed = new EventEmitter<string>();
+
+  onKeyPressed(letter: string) {
+    this.pressed.emit(letter);
+  }
 }

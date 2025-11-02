@@ -4,3 +4,8 @@
     left: 50%;
     transform: translate(-50%);
 }
+.input-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
