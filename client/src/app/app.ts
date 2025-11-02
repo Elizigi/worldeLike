@@ -79,38 +79,40 @@ export class App implements OnInit {
     this.guesses.set(updatedGuesses);
   }
   sendWord(word: string) {
-    this.http.post<ServerResponse>('https://MarixProt.pythonanywhere.com/validate', { word }).subscribe({
-      next: (response) => {
-        const resultsArray = response.result;
+    this.http
+      .post<ServerResponse>('https://MarixProt.pythonanywhere.com/validate', { word })
+      .subscribe({
+        next: (response) => {
+          const resultsArray = response.result;
 
-        for (const [index, result] of resultsArray.entries()) {
+          for (const [index, result] of resultsArray.entries()) {
+            setTimeout(() => {
+              this.updateGuessAtPosition(index, result.status);
+            }, index * 300);
+          }
+
           setTimeout(() => {
-            this.updateGuessAtPosition(index, result.status);
-          }, index * 300);
-        }
-
-        setTimeout(() => {
-          this.saveProgress();
-          const rightLetters = resultsArray.filter((l) => l.status === 'correct').length;
-          if (rightLetters === 5) {
-            this.gameWin();
+            this.saveProgress();
+            const rightLetters = resultsArray.filter((l) => l.status === 'correct').length;
+            if (rightLetters === 5) {
+              this.gameWin();
+              return;
+            }
+            if (this.row >= 5) {
+              this.gameOver();
+              return;
+            }
+            this.nextRound();
+          }, resultsArray.length * 200 + 600);
+        },
+        error: (err) => {
+          if (err.message) {
+            this.wordNotIn();
             return;
           }
-          if (this.row >= 5) {
-            this.gameOver();
-            return;
-          }
-          this.nextRound();
-        }, resultsArray.length * 200 + 600);
-      },
-      error: (err) => {
-        if (err.message) {
-          this.wordNotIn();
-          return;
-        }
-        console.error('Request failed', err);
-      },
-    });
+          console.error('Request failed', err);
+        },
+      });
   }
   wordNotIn() {
     this.controlLocked = false;
@@ -161,10 +163,10 @@ export class App implements OnInit {
     }
 
     this.guesses.set(progress.guesses);
-    this.row = progress.row || 0;
+    this.row = this.guesses()[0].filter((cell) => cell.status !== '').length;
 
     if (progress.keyboardStatus) {
-      this.keyboardStatus.set(new Map(progress.keyboardStatus)); 
+      this.keyboardStatus.set(new Map(progress.keyboardStatus));
     }
 
     const lastCompletedRow = this.row - 1;
