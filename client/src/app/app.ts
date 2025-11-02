@@ -101,9 +101,20 @@ export class App {
     this.showSystemMessage('word not in collection');
   }
   gameWin() {
-    this.showSystemMessage(' EZ PEASY ');
-    this.showSystemMessage(' Done with ease ');
-    this.showSystemMessage(' Phew ');
+    const amountOfClutch = this.row;
+    if (amountOfClutch === 0) {
+      this.showSystemMessage(' LUCKY! ');
+      return;
+    }
+    if (amountOfClutch < 2) {
+      this.showSystemMessage(' EZ PEASY ');
+      return;
+    }
+    if (amountOfClutch < 5) {
+      this.showSystemMessage(' Well Done ');
+      return;
+    }
+    if (amountOfClutch === 5) this.showSystemMessage(' Phew ');
   }
   gameOver() {
     this.showSystemMessage(' GAME OVER ');
