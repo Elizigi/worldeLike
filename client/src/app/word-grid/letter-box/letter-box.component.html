@@ -1,3 +1,3 @@
-<div class="letter-box" [ngClass]="letterCell.status">
+<div class="letter-box" [ngClass]="[letterCell.status, isFlipping ? 'flip' : '']">
   {{ letterCell.letter }}
 </div>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { LetterCell } from '../../model/letterInterfaceModel';
 
 @Component({
@@ -8,6 +8,21 @@ import { LetterCell } from '../../model/letterInterfaceModel';
   imports: [CommonModule],
   styleUrls: ['./letter-box.component.scss'],
 })
-export class LetterBoxComponent {
-  @Input() letterCell: LetterCell = { letter: '', status: '' };
+export class LetterBoxComponent implements OnChanges {
+  @Input() letterCell!: LetterCell 
+  isFlipping = false;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['letterCell']) {
+      const previousStatus = changes['letterCell'].previousValue?.status;
+      const currentStatus = changes['letterCell'].currentValue?.status;
+      
+      if (previousStatus === '' && currentStatus && currentStatus !== '') {
+        this.isFlipping = true;
+        setTimeout(() => {
+          this.isFlipping = false;
+        }, 500);
+      }
+    }
+  }
 }
