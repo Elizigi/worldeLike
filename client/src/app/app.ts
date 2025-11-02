@@ -79,7 +79,7 @@ export class App implements OnInit {
     this.guesses.set(updatedGuesses);
   }
   sendWord(word: string) {
-    this.http.post<ServerResponse>('http://localhost:5000/validate', { word }).subscribe({
+    this.http.post<ServerResponse>('https://MarixProt.pythonanywhere.com/validate', { word }).subscribe({
       next: (response) => {
         const resultsArray = response.result;
 

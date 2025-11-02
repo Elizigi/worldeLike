@@ -15,7 +15,7 @@ def save_score():
     return jsonify({"status": "ok", "score": data})
 
 last_request_time = {}
-CORS(app, origins=["http://localhost:4200"]) 
+CORS(app, origins=["https://worlde-like.vercel.app"]) 
 def throttle(seconds=0.5):
     def decorator(f):
         @wraps(f)
