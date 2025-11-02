@@ -4,7 +4,7 @@ A full-stack word guessing game built with Angular and Flask.
 
 ## Live Demo
 
-**Frontend:** [https://worlde-like.vercel.app](https://worlde-like.vercel.app)
+ [https://worlde-like.vercel.app](https://worlde-like.vercel.app)
 
 ## Features
 
