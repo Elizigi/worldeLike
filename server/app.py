@@ -2,8 +2,11 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import random
 from datetime import datetime, timedelta
-
+from functools import wraps
+import time
 app = Flask(__name__)
+import json  
+import os 
 
 @app.route('/api/score', methods=['POST'])
 
@@ -11,28 +14,57 @@ def save_score():
     data = request.json
     return jsonify({"status": "ok", "score": data})
 
+last_request_time = {}
 CORS(app, origins=["http://localhost:4200"]) 
+def throttle(seconds=0.5):
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
 
+            client_ip = request.remote_addr
+            current_time = time.time()
+            
+            if client_ip in last_request_time:
+                time_since_last = current_time - last_request_time[client_ip]
+                if time_since_last < seconds:
+                    return jsonify({"error": "Too many requests, slow down"}), 429
+            
+            last_request_time[client_ip] = current_time
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator
 
 with open("words.txt", "r") as f:
     words = [line.strip() for line in f if len(line.strip()) == 5]
 
-random_word = None
-next_reset_time = None
+WORD_STATE_FILE = 'word_state.json'
 
 def get_daily_word():
-    global random_word, next_reset_time
-    
     current_time = datetime.now()
     
-    if random_word is None or next_reset_time is None or current_time >= next_reset_time:
-        random_word = random.choice(words)
-        next_reset_time = current_time + timedelta(days=1)
-        print(f"New word selected: {random_word}, resets at: {next_reset_time}")
+    if os.path.exists(WORD_STATE_FILE):
+        with open(WORD_STATE_FILE, 'r') as f:
+            state = json.load(f)
+            saved_word = state.get('word')
+            saved_reset = datetime.fromisoformat(state.get('reset_time'))
+            
+            if current_time < saved_reset:
+                return saved_word
     
-    return random_word
+    new_word = random.choice(words)
+    next_reset = current_time + timedelta(days=1)
+    
+    with open(WORD_STATE_FILE, 'w') as f:
+        json.dump({
+            'word': new_word,
+            'reset_time': next_reset.isoformat()
+        }, f)
+    
+    print(f"New word selected: {new_word}, resets at: {next_reset}")
+    return new_word
 
 @app.route('/validate', methods=['POST'])
+@throttle(0.5)
 def validate_word():
     data = request.get_json()
     guess = data.get('word', '').lower()
