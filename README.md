@@ -2,6 +2,8 @@
 
 A full-stack word guessing game built with Angular and Flask.
 
+> Built in under 24 hours, to fit with the game spirit. 
+
 ## Live Demo
 
  [https://worlde-like.vercel.app](https://worlde-like.vercel.app)
