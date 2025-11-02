@@ -1,4 +1,4 @@
-# Wordle Clone
+# Wordle-Like Game
 
 A full-stack word guessing game built with Angular and Flask.
 
