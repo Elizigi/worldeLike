@@ -21,7 +21,7 @@ export class App implements OnInit {
   guesses = signal<LetterCell[][]>(
     Array.from({ length: 5 }, () => Array.from({ length: 6 }, () => ({ letter: '', status: '' })))
   );
-
+  keyboardStatus = signal<Map<string, StatusCell>>(new Map());
   row: number = 0;
   controlLocked = false;
 
@@ -31,6 +31,7 @@ export class App implements OnInit {
   changeTitle() {
     this.title.set('Word Game');
   }
+
   addLetter(letter: string) {
     if (this.controlLocked) return;
     if (letter === 'Enter') {
@@ -57,6 +58,19 @@ export class App implements OnInit {
     const updatedGuesses = this.guesses().map((column, idx) =>
       column.map((cell, rowIdx) => {
         if (rowIdx === this.row && idx === colIndex) {
+          const letter = cell.letter.toUpperCase();
+          const currentStatus = this.keyboardStatus().get(letter);
+
+          if (
+            !currentStatus ||
+            status === 'correct' ||
+            (status === 'present' && currentStatus !== 'correct')
+          ) {
+            const newMap = new Map(this.keyboardStatus());
+            newMap.set(letter, status);
+            this.keyboardStatus.set(newMap);
+          }
+
           return { ...cell, status };
         }
         return cell;
@@ -136,28 +150,28 @@ export class App implements OnInit {
 
   loadProgress() {
     const savedProgress = localStorage.getItem('wordleProgress');
-    if (savedProgress) {
-      const progress = JSON.parse(savedProgress);
-      const today = new Date().toDateString();
-      if (progress.date === today) {
-        this.guesses.set(progress.guesses);
+    if (!savedProgress) return;
 
-        this.row = this.guesses().some((col) => col.some((cell) => cell.status !== ''))
-          ? this.guesses()[0].filter((cell) => cell.status !== '').length
-          : 0;
+    const progress = JSON.parse(savedProgress);
+    const today = new Date().toDateString();
 
-        const lastCompletedRow = this.row - 1;
-        if (lastCompletedRow >= 0) {
-          const isWon = this.guesses().every((col) => col[lastCompletedRow]?.status === 'correct');
-          const isLost = lastCompletedRow >= 5;
+    if (progress.date !== today) {
+      localStorage.removeItem('wordleProgress');
+      return;
+    }
 
-          if (isWon || isLost) {
-            this.controlLocked = true;
-          }
-        }
-      } else {
-        localStorage.removeItem('wordleProgress');
-      }
+    this.guesses.set(progress.guesses);
+    this.row = progress.row || 0;
+
+    if (progress.keyboardStatus) {
+      this.keyboardStatus.set(new Map(progress.keyboardStatus)); 
+    }
+
+    const lastCompletedRow = this.row - 1;
+    if (lastCompletedRow >= 0) {
+      const isWon = this.guesses().every((col) => col[lastCompletedRow]?.status === 'correct');
+      const isLost = lastCompletedRow >= 5;
+      if (isWon || isLost) this.controlLocked = true;
     }
   }
 
@@ -165,6 +179,7 @@ export class App implements OnInit {
     const progress = {
       guesses: this.guesses(),
       row: this.row,
+      keyboardStatus: Array.from(this.keyboardStatus().entries()),
       date: new Date().toDateString(),
     };
     localStorage.setItem('wordleProgress', JSON.stringify(progress));

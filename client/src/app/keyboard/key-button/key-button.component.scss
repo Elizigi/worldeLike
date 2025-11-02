@@ -16,12 +16,15 @@
     box-shadow: inset 1px 1px rgba(66, 66, 104, 0.255);
   }
 }
-.key-button .correct {
+.correct {
   background-color: green;
+  border-color: green;
 }
-.letter-button .present {
-  background-color: yellow;
+.present {
+  background-color: rgb(181, 159, 59);
+  border-color: rgb(181, 159, 59);
 }
-.letter-button .absent {
-  background-color: gray;
+.absent {
+  background-color: rgb(58, 58, 60);
+  border-color: rgb(58, 58, 60);
 }

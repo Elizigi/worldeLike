@@ -8,11 +8,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./key-button.component.scss'],
 })
 export class KeyButtonComponent {
-  @Input() key: string = '';
-  @Input() status: 'correct' | 'absent' | '' = '';
+  @Input() letter: string = '';
+  @Input() status: 'correct' | 'present' | 'absent' | '' = '';
   @Output() pressed = new EventEmitter<string>();
 
   handleClick() {
-    this.pressed.emit(this.key);
+    this.pressed.emit(this.letter);
   }
 }

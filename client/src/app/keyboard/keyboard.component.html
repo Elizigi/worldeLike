@@ -1,4 +1,8 @@
-  <div class="input-row" *ngFor="let row of keys">
-    <app-key-button  (pressed)="onKeyPressed($event)"  *ngFor="let key of row" [key]="key"> </app-key-button>
-  </div>
-  
+<div class="input-row" *ngFor="let row of letterInput">
+  <app-key-button
+    *ngFor="let letter of row"
+    [letter]="letter"
+    [status]="getLetterStatus(letter)"
+    (pressed)="clickLetter($event)">
+  </app-key-button>
+</div>
