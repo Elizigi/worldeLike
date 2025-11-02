@@ -9,5 +9,5 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./word-grid.component.scss'],
 })
 export class WordGridComponent {
-  guesses: string[][] = Array.from({ length: 5 }, () => new Array(6).fill('T'));
+  guesses: string[][] = Array.from({ length: 5 }, () => new Array(6).fill(''));
 }

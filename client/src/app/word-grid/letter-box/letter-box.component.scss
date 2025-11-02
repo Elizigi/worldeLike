@@ -1,9 +1,18 @@
-.letter-box{
-    border: 1px solid rgb(164, 164, 164);
-    width: 5rem;
-    height: 5rem;
-    margin: .2rem;
-    text-align: center;
-    font-size: 4rem;
-    font-family: 'Times New Roman', Times, serif;
+.letter-box {
+  border: 1px solid rgb(164, 164, 164);
+  width: 5rem;
+  height: 5rem;
+  margin: 0.2rem;
+  text-align: center;
+  font-size: 4rem;
+  font-family: 'Times New Roman', Times, serif;
+}
+.letter-box.correct {
+  background-color: green;
+}
+.letter-box.present {
+  background-color: yellow;
+}
+.letter-box.absent {
+  background-color: gray;
 }
