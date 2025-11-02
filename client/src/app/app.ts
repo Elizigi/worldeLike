@@ -57,7 +57,6 @@ export class App {
     this.http.post<ServerResponse>('http://localhost:5000/validate', { word }).subscribe({
       next: (response: ServerResponse) => {
         const resultsArray = response.result;
-        let rightLetters = 0;
         console.log('received');
         console.log('checking for row', this.row);
         const updatedGuesses = this.guesses().map((column, colIndex) =>
@@ -74,9 +73,15 @@ export class App {
 
         this.guesses.set(updatedGuesses);
 
-        rightLetters = resultsArray.filter((l) => l.status === 'correct').length;
-        if (rightLetters === 4) return this.gameWin();
-        if (this.row >= 5) return this.gameOver();
+        const rightLetters = resultsArray.filter((l) => l.status === 'correct').length;
+        if (rightLetters === 5) {
+          this.gameWin();
+          return;
+        }
+        if (this.row >= 5) {
+          this.gameOver();
+          return;
+        }
         this.nextRound();
       },
       error: (err) => {
