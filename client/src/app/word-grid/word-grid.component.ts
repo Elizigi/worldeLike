@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { LetterBoxComponent } from './letter-box/letter-box.component';
 import { CommonModule } from '@angular/common';
+import { LetterCell } from '../model/letterInterfaceModel';
 
 @Component({
   selector: 'app-word-grid',
@@ -9,5 +10,5 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./word-grid.component.scss'],
 })
 export class WordGridComponent {
-  @Input() guesses: string[][]= [];
+  @Input() guesses: LetterCell[][]= [];
 }

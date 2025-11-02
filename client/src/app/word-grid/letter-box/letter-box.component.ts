@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { LetterCell } from '../../model/letterInterfaceModel';
 
 @Component({
   selector: 'app-letter-box',
@@ -8,6 +9,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./letter-box.component.scss'],
 })
 export class LetterBoxComponent {
-  @Input() letter: string = '';
-  @Input() status: 'correct' | 'present' | 'absent' | '' = '';
+  @Input() letterCell: LetterCell = { letter: '', status: '' };
 }
