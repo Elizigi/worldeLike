@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LetterBoxComponent } from './letter-box/letter-box.component';
 import { CommonModule } from '@angular/common';
 
@@ -9,5 +9,5 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./word-grid.component.scss'],
 })
 export class WordGridComponent {
-  guesses: string[][] = Array.from({ length: 5 }, () => new Array(6).fill(''));
+  @Input() guesses: string[][]= [];
 }
